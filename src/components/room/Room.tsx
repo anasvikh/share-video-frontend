@@ -1,16 +1,17 @@
-import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import React, { useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import { FormControl, InputAdornment, InputBase, InputLabel, OutlinedInput, Typography } from '@material-ui/core';
-import AddRoundedIcon from '@material-ui/icons/AddRounded';
+import { Grid, Paper, Typography } from '@material-ui/core';
+import SentimentDissatisfiedRoundedIcon from '@material-ui/icons/SentimentDissatisfiedRounded';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
     player: {
-        width: 700,
-        height: 400,
+        width: '100%',
+        height: '100%',
+        minHeight: 400,
         backgroundColor: '#282c34',
         display: 'flex',
         alignItems: 'center',
@@ -19,79 +20,63 @@ const useStyles = makeStyles((theme) => ({
     noVideo: {
         color: 'grey'
     },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'red',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '50ch',
-            '&:focus': {
-                width: '56ch',
-            },
-        },
-    },
-    srcInput: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-    }
 }));
 
 type RoomProps = {
-    onMenuButtonClick?: any,
+    videoSrc: any,
 }
 
-export default function Room({ onMenuButtonClick }: RoomProps) {
+export default function Room({ videoSrc }: RoomProps) {
     const classes = useStyles();
-    const [videoSrc, setVideoSrc] = React.useState('');
+    useEffect(() => {
+        console.log("videoSrc has changed");
+        setVideoError(false);
+    }, [videoSrc]);
+    const [videoError, setVideoError] = React.useState(false); // TODO: find a way to get an error
 
     return (
         <div className={classes.root}>
-            {/* <FormControl fullWidth className={classes.srcInput} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
-                <OutlinedInput
-                    id="outlined-adornment-amount"
-                    // value={values.amount}
-                    // onChange={handleChange('amount')}
-                    startAdornment={<InputAdornment position="start">
-                        <AddRoundedIcon/>
-                    </InputAdornment>}
-                    labelWidth={60}
-                />
-            </FormControl> */}
-            <div className={classes.player}>
-                {!videoSrc && <div className={classes.noVideo}>
-                    <WarningRoundedIcon style={{ fontSize: 100 }} />
-                    <Typography style={{ fontSize: 26 }}>Видео не выбрано</Typography>
-                </div>}
-            </div>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <Paper className={classes.paper}>xs=12</Paper>
+                </Grid>
+                <Grid item xs={12} md={7}>
+                    <Paper className={classes.paper}>
+                        <div className={classes.player}>
+                            {(!videoSrc || videoError) && <div className={classes.noVideo}>
+                                {videoError ?
+                                    <SentimentDissatisfiedRoundedIcon style={{ fontSize: 80 }} /> :
+                                    <WarningRoundedIcon style={{ fontSize: 100 }} />}
+                                <Typography style={{ fontSize: 26 }}>
+                                    {videoError ?
+                                        'Ошибка воспроизведения' :
+                                        'Видео не выбрано'}
+                                </Typography>
+                            </div>}
+                            {videoSrc && !videoError && <video width="100%" height="100%" controls
+                                onPause={event => console.log(`Pause ${event.currentTarget.currentTime} sec`)}
+                                onError={event => { console.log('video error'); setVideoError(true) }}
+                                onPlay={event => console.log(`Play ${event.currentTarget.currentTime} sec`)}>
+                                <source src={videoSrc} />
+                    Your browser does not support the video tag.
+                </video>}
+                        </div>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={5} container>
+                    <Grid item xs={12}>
+                        <Paper className={classes.paper}>xs=6</Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper className={classes.paper}>xs=6</Paper>
+                    </Grid>
+                </Grid>
+            </Grid>
         </div>
     );
 }

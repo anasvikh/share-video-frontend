@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(0, 2),
         height: '100%',
         position: 'absolute',
-        pointerEvents: 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        cursor: 'default'
     },
     inputRoot: {
         color: 'inherit',
@@ -67,10 +67,19 @@ const useStyles = makeStyles((theme) => ({
 
 type ToolbarProps = {
     onMenuButtonClick: any,
+    onAddVideo: any
 }
 
-export default function AppToolbar({ onMenuButtonClick }: ToolbarProps) {
+export default function AppToolbar({ onMenuButtonClick, onAddVideo }: ToolbarProps) {
     const classes = useStyles();
+    const [inputValue, setinputValue] = React.useState('');
+
+    const changeInputValue = (value: string) => {
+        console.log('change input value', value);
+        setinputValue(value);
+        onAddVideo(null);
+        onAddVideo(value);
+    }
 
     return (
         <div className={classes.root}>
@@ -94,6 +103,8 @@ export default function AppToolbar({ onMenuButtonClick }: ToolbarProps) {
                         </div>
                         <InputBase
                             placeholder="Добавление видео..."
+                            value={inputValue}
+                            onChange={e => changeInputValue(e.target.value)}
                             classes={{
                                 root: classes.inputRoot,
                                 input: classes.inputInput,

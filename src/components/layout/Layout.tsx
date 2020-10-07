@@ -26,11 +26,13 @@ const useStyles = makeStyles((theme) => ({
 export default function Layout() {
     const classes = useStyles();
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
+    const [videoSrc, setVideoSrc] = React.useState('');
 
     return (
         <div className={classes.root}>
             <AppToolbar
-                onMenuButtonClick={() => setSidebarOpen(true)} />
+                onMenuButtonClick={() => setSidebarOpen(true)}
+                onAddVideo={(value: string) => setVideoSrc(value)} />
             <AppSidebar
                 open={sidebarOpen}
                 onClose={() => setSidebarOpen(false)} />
@@ -40,7 +42,7 @@ export default function Layout() {
                         <Switch>
                             <Route exact path="/"
                                 render={(props) =>
-                                    <Room />
+                                    <Room videoSrc={videoSrc} />
                                 }
                             />
                         </Switch>
