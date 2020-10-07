@@ -4,9 +4,13 @@ import Layout from './components/layout/Layout';
 import Login from './components/login/Login';
 
 function App() {
+  const [isAuthorized, setAuthorized] = React.useState(false);
+
   return (
     <div className="App">
-      <Layout />
+      { isAuthorized ?
+        <Layout /> :
+        <Login onAuthorize={() => setAuthorized(true)} />}
     </div>
   );
 }

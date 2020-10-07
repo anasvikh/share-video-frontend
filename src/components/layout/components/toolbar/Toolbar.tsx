@@ -11,7 +11,6 @@ import AddRoundedIcon from '@material-ui/icons/AddRounded';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -66,11 +65,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ToolbarProps = {
+    isInputVisible: boolean,
     onMenuButtonClick: any,
     onAddVideo: any
 }
 
-export default function AppToolbar({ onMenuButtonClick, onAddVideo }: ToolbarProps) {
+export default function AppToolbar({ isInputVisible, onMenuButtonClick, onAddVideo }: ToolbarProps) {
     const classes = useStyles();
     const [inputValue, setinputValue] = React.useState('');
 
@@ -97,7 +97,7 @@ export default function AppToolbar({ onMenuButtonClick, onAddVideo }: ToolbarPro
                     <Typography className={classes.title} variant="h6" noWrap>
                         Share TV
                     </Typography>
-                    <div className={classes.search}>
+                    {isInputVisible && <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <AddRoundedIcon />
                         </div>
@@ -111,7 +111,7 @@ export default function AppToolbar({ onMenuButtonClick, onAddVideo }: ToolbarPro
                             }}
                             inputProps={{ 'aria-label': 'search' }}
                         />
-                    </div>
+                    </div>}
                 </Toolbar>
             </AppBar>
         </div>

@@ -27,16 +27,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type RoomProps = {
+type RoomPageProps = {
     videoSrc: any,
+    onToolbarInputVisibilityChanged: any
 }
 
-export default function Room({ videoSrc }: RoomProps) {
+export default function RoomPage({ videoSrc, onToolbarInputVisibilityChanged }: RoomPageProps) {
     const classes = useStyles();
     useEffect(() => {
         console.log("videoSrc has changed");
         setVideoError(false);
     }, [videoSrc]);
+
+    useEffect(() => {
+        console.log('mount');
+        onToolbarInputVisibilityChanged(true);
+    }, []);
+    useEffect(() => () => {
+        console.log("unmount");
+        onToolbarInputVisibilityChanged(false);
+    }, []);
+
     const [videoError, setVideoError] = React.useState(false); // TODO: find a way to get an error
 
     return (

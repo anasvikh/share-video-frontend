@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, makeStyles } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -11,12 +12,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-type LoginProps = {
-    onAuthorize: any
+type HomeProps = {
+    onCreateRoom: any
+    onJoinRoom: any
 }
 
-export default function Login({ onAuthorize }: LoginProps) {
+export default function Home({ onCreateRoom, onJoinRoom }: HomeProps) {
     const classes = useStyles();
+    const history = useHistory();
 
     return (
         <div className={classes.root}>
@@ -25,14 +28,15 @@ export default function Login({ onAuthorize }: LoginProps) {
                 size="large"
                 color="primary"
                 className="app-button"
-                onClick={onAuthorize}>
-                Вход</Button>
+                onClick={() => history.push('/room')}>
+                Создать комнату</Button>
             <Button
                 variant="outlined"
                 size="large"
                 color="primary"
-                className="app-button">
-                Регистрация</Button>
+                className="app-button"
+                onClick={onJoinRoom}>
+                Присоединиться</Button>
         </div>
     )
 }
